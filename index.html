@@ -1,0 +1,273 @@
+<body></body>
+<script src="http://gamingJS.com/Three.js"></script>
+<script src="http://gamingJS.com/ChromeFixes.js"></script>
+<script>
+    var camera, scene, renderer;
+    var geometry, material, mesh;
+    var meshes = [];
+    init();
+    animate();
+
+    function init()
+    {
+        scene = new THREE.Scene();
+        
+
+        // voxels!
+
+        var aspect = window.innerWidth / window.innerHeight;
+        camera = new THREE.PerspectiveCamera(75, aspect, 1, 1000);
+        // var camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
+        camera.position.x = 10;
+        camera.position.y = 0;
+        camera.position.z = 620;
+        scene.add(camera);
+
+        function addCube(options, i)
+        {
+            console.log(options);
+            console.log('i', i);
+            var size = options.size || 100;
+            var color = options.color || 0xFFFFFF;
+            var wireframe = options.wireframe || true;
+
+            geometry = new THREE.CubeGeometry(size, size, size);
+            material = new THREE.MeshBasicMaterial({
+                color: color,
+                wireframe: wireframe,
+                wireframeLinewidth: 1
+            });
+            meshes.push(new THREE.Mesh(geometry, material));
+            // scene.add(mesh);
+        }
+
+        var axialCubes = [
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0.01,
+                aniRotY: 0,
+                aniRotZ: 0
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0,
+                aniRotY: 0.01,
+                aniRotZ: 0
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0,
+                aniRotY: 0,
+                aniRotZ: 0.01
+            },
+
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: -0.01,
+                aniRotY: 0,
+                aniRotZ: 0
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0,
+                aniRotY: -0.01,
+                aniRotZ: 0
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0,
+                aniRotY: 0,
+                aniRotZ: -0.01
+            }
+        ];
+
+        var clockWiseCubes = [
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0.01,
+                aniRotY: 0,
+                aniRotZ: 0.0,
+                posX: 62,
+                posY: 62
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0,
+                aniRotY: -0.01,
+                aniRotZ: -0.0,
+                posX: 62,
+                posY: -62
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: -0.01,
+                aniRotY: 0,
+                aniRotZ: -0.0,
+                posX: -62,
+                posY: -62
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0,
+                aniRotY: 0.01,
+                aniRotZ: 0.0,
+                posX: -62,
+                posY: 62
+            }
+        ]
+
+        var clockWise2Axes = [
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0.01,
+                aniRotY: 0.02,
+                aniRotZ: 0.01,
+                posX: 62,
+                posY: 62
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0,
+                aniRotY: -0.01,
+                aniRotZ: -0.0,
+                posX: 62,
+                posY: -62
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: -0.01,
+                aniRotY: 0,
+                aniRotZ: -0.0,
+                posX: -62,
+                posY: -62
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0,
+                aniRotY: 0.01,
+                aniRotZ: 0.0,
+                posX: -62,
+                posY: 62
+            }
+        ]
+
+        xyzRotateExamples = [
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0.01,
+                aniRotY: 0,
+                aniRotZ: 0,
+                posX: -200,
+                posY: 0,
+                posZ: 0
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0,
+                aniRotY: 0.01,
+                aniRotZ: 0.0,
+                posX: 0,
+                posY: 0
+            },
+            {
+                size: 100,
+                color: 0xFFFFFF,
+                wireframe: true,
+                aniRotX: 0.0,
+                aniRotY: 0,
+                aniRotZ: 0.01,
+                posX: 200,
+                posY: 0,
+                posZ: 0
+            }
+        ]
+
+
+
+        // axialCubes.forEach(function(cube, index){addCube(cube, index)});
+        // axialMeshes.forEach(function (mesh) { scene.add(mesh)});
+        // clockWiseCubes.forEach(function(cube, index){addCube(cube, index)});
+        // clockWise2Axes.forEach(function(cube, index){addCube(cube, index)});
+        xyzRotateExamples.forEach(function(cube, index){addCube(cube, index)});
+        // meshes.forEach(function (mesh, index) { 
+        //     console.log(mesh);
+        //     scene.add(mesh);
+        //     var matchedCube = clockWiseCubes[index];
+        //     mesh.position.set(matchedCube.posX, matchedCube.posY, 0); 
+        // });
+
+        addMeshesAndSetPositions(xyzRotateExamples);
+
+        function addMeshesAndSetPositions(set) {
+            meshes.forEach(function (mesh, index)
+            {
+                console.log(mesh);
+                scene.add(mesh);
+                var matchedCube = set[index];   
+                mesh.position.set(matchedCube.posX, matchedCube.posY, matchedCube.posZ || 0);
+            });
+        };
+
+        renderer = new THREE.CanvasRenderer();
+        renderer.setClearColorHex(0x000000);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        document.body.style.margin = 0;
+        document.body.style.overflow = 'hidden';
+        document.body.appendChild(renderer.domElement);
+    }
+
+    function animate()
+    {
+        requestAnimationFrame(animate);
+
+        rotateSet(xyzRotateExamples);
+
+        function rotateSet(set) {
+            meshes.forEach(function (mesh, index)
+            {
+                var cube = set[index];
+                mesh.rotation.x += cube.aniRotX;
+                mesh.rotation.y += cube.aniRotY;
+                mesh.rotation.z += cube.aniRotZ;
+            });
+        }
+
+        // mesh.rotation.x = Date.now() * 0.0001;
+        // mesh.rotation.y = Date.now() * 0.001;
+
+        renderer.render(scene, camera);
+    }
+</script>

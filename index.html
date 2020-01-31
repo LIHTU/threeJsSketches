@@ -11,7 +11,7 @@
     function init()
     {
         scene = new THREE.Scene();
-        
+
 
         // voxels!
 
@@ -23,25 +23,7 @@
         camera.position.z = 620;
         scene.add(camera);
 
-        function addCube(options, i)
-        {
-            console.log(options);
-            console.log('i', i);
-            var size = options.size || 100;
-            var color = options.color || 0xFFFFFF;
-            var wireframe = options.wireframe || true;
-
-            geometry = new THREE.CubeGeometry(size, size, size);
-            material = new THREE.MeshBasicMaterial({
-                color: color,
-                wireframe: wireframe,
-                wireframeLinewidth: 1
-            });
-            meshes.push(new THREE.Mesh(geometry, material));
-            // scene.add(mesh);
-        }
-
-        var axialCubes = [
+        axialCubes = [
             {
                 size: 100,
                 color: 0xFFFFFF,
@@ -93,11 +75,8 @@
             }
         ];
 
-        var clockWiseCubes = [
+        clockWiseCubes = [
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: 0.01,
                 aniRotY: 0,
                 aniRotZ: 0.0,
@@ -105,9 +84,6 @@
                 posY: 62
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: 0,
                 aniRotY: -0.01,
                 aniRotZ: -0.0,
@@ -115,9 +91,6 @@
                 posY: -62
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: -0.01,
                 aniRotY: 0,
                 aniRotZ: -0.0,
@@ -125,9 +98,6 @@
                 posY: -62
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: 0,
                 aniRotY: 0.01,
                 aniRotZ: 0.0,
@@ -136,11 +106,8 @@
             }
         ]
 
-        var clockWise2Axes = [
+        clockWise2Axes = [
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: 0.01,
                 aniRotY: 0.02,
                 aniRotZ: 0.01,
@@ -148,9 +115,6 @@
                 posY: 62
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: 0,
                 aniRotY: -0.01,
                 aniRotZ: -0.0,
@@ -158,9 +122,6 @@
                 posY: -62
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: -0.01,
                 aniRotY: 0,
                 aniRotZ: -0.0,
@@ -168,9 +129,6 @@
                 posY: -62
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: 0,
                 aniRotY: 0.01,
                 aniRotZ: 0.0,
@@ -181,9 +139,6 @@
 
         xyzRotateExamples = [
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: 0.01,
                 aniRotY: 0,
                 aniRotZ: 0,
@@ -192,9 +147,6 @@
                 posZ: 0
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: 0,
                 aniRotY: 0.01,
                 aniRotZ: 0.0,
@@ -202,9 +154,6 @@
                 posY: 0
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
-                wireframe: true,
                 aniRotX: 0.0,
                 aniRotY: 0,
                 aniRotZ: 0.01,
@@ -216,11 +165,11 @@
 
 
 
-        // axialCubes.forEach(function(cube, index){addCube(cube, index)});
+        // axialCubes.forEach(function(cube, index){addFormToMesh(cube, index)});
         // axialMeshes.forEach(function (mesh) { scene.add(mesh)});
-        // clockWiseCubes.forEach(function(cube, index){addCube(cube, index)});
-        // clockWise2Axes.forEach(function(cube, index){addCube(cube, index)});
-        xyzRotateExamples.forEach(function(cube, index){addCube(cube, index)});
+        // clockWiseCubes.forEach(function(cube, index){addFormToMesh(cube, index)});
+        // clockWise2Axes.forEach(function(cube, index){addFormToMesh(cube, index)});
+        // xyzRotateExamples.forEach(function (cube, index) { addFormToMesh(cube, index) });
         // meshes.forEach(function (mesh, index) { 
         //     console.log(mesh);
         //     scene.add(mesh);
@@ -228,15 +177,83 @@
         //     mesh.position.set(matchedCube.posX, matchedCube.posY, 0); 
         // });
 
-        addMeshesAndSetPositions(xyzRotateExamples);
+        setsOfForms = [
+            axialCubes,
+            clockWiseCubes,
+            clockWise2Axes,
+            xyzRotateExamples
+        ]
 
-        function addMeshesAndSetPositions(set) {
+        // add forms to mesh
+        console.log('window.innerHeight', window.innerHeight);
+        setsOfForms.forEach((formSet, index) => 
+        {
+            var yInterval = window.innerHeight / (setsOfForms.length);
+            // console.log("yInterval", yInterval);
+            // console.log((yInterval * index) - window.innerHeight / 2);
+            var formSetYPos = (yInterval * (index)) - (window.innerHeight / 2) + yInterval/2;
+            console.log(formSetYPos);
+            formSet.forEach(function (form, index) {
+                addFormToMesh(form, index, formSetYPos); 
+            });
+
+            //. meshes pos also zero here.
+            console.log('meshes after adding a form set to mesh', meshes[0].position.y);
+        });
+
+        // meshes pos = 0   why?
+        console.log('meshes at end of adding forms to mesh', meshes[0].position.y);
+
+        // add meshes to scene
+        // addMeshesToScene(meshes);
+        console.log('meshes', meshes);
+
+        meshes.forEach(function (mesh, index)
+        {
+            console.log("mesh.position.y", mesh.position.y);
+            scene.add(mesh);
+            // var matchedCube = set[index];
+            // mesh.position.set(
+            //     matchedCube.posX || 0, 
+            //     mesh.position.y || 0, // set in addFormToMesh()
+            //     matchedCube.posZ || 0
+            // );
+        });
+
+        function addFormToMesh(options, i, formSetYPos)
+        {
+            var size = options.size || 100;
+            var color = options.color || 0xFFFFFF;
+            var wireframe = options.wireframe || true;
+
+            geometry = new THREE.CubeGeometry(size, size, size);
+            material = new THREE.MeshBasicMaterial({
+                color: color,
+                wireframe: wireframe,
+                wireframeLinewidth: 1
+            });
+            var formMesh = new THREE.Mesh(geometry, material);
+            // console.log('formMesh.position.y || 0 + formSetYPos', formMesh.position.y + formSetYPos);
+            formMesh.position.x = (formMesh.position.x || 0);
+            formMesh.position.y = (formMesh.position.y || 0) + (formSetYPos || 0);
+            formMesh.position.z = (formMesh.position.z || 0);
+            console.log('aftte from added to mesh formMesh.position.y', formMesh.position.y);
+            // console.log("what is y pos?:", formMesh)
+            meshes.push(formMesh);
+        }
+
+        function addMeshesToScene(set)
+        {
             meshes.forEach(function (mesh, index)
             {
-                console.log(mesh);
+                console.log("mesh.position.y", mesh.position.y);
                 scene.add(mesh);
-                var matchedCube = set[index];   
-                mesh.position.set(matchedCube.posX, matchedCube.posY, matchedCube.posZ || 0);
+                var matchedCube = set[index];
+                // mesh.position.set(
+                //     matchedCube.posX || 0, 
+                //     mesh.position.y || 0, // set in addFormToMesh()
+                //     matchedCube.posZ || 0
+                // );
             });
         };
 
@@ -253,15 +270,19 @@
     {
         requestAnimationFrame(animate);
 
-        rotateSet(xyzRotateExamples);
+        // setsOfForms.forEach(set => rotateSet(set));
+        // rotateSet(xyzRotateExamples);
 
-        function rotateSet(set) {
+
+        function rotateSet(set)
+        {
+            console.log('rotateSet: ', set);
             meshes.forEach(function (mesh, index)
             {
                 var cube = set[index];
-                mesh.rotation.x += cube.aniRotX;
-                mesh.rotation.y += cube.aniRotY;
-                mesh.rotation.z += cube.aniRotZ;
+                mesh.rotation.x += cube.aniRotX || 0;
+                mesh.rotation.y += cube.aniRotY || 0;
+                mesh.rotation.z += cube.aniRotZ || 0;
             });
         }
 

@@ -1,6 +1,17 @@
 <body></body>
 <script src="http://gamingJS.com/Three.js"></script>
 <script src="http://gamingJS.com/ChromeFixes.js"></script>
+
+
+<!-- put in your array doc... -->
+<script>
+    var nums = [2,4,6];
+    var [first, ...rest] = nums;
+    console.log('first', first);
+    console.log('rest', rest);
+</script>
+
+
 <script>
     var camera, scene, renderer;
     var geometry, material, mesh;
@@ -11,7 +22,6 @@
     function init()
     {
         scene = new THREE.Scene();
-
 
         // voxels!
 
@@ -25,92 +35,97 @@
 
         axialCubes = [
             {
-                size: 100,
-                color: 0xFFFFFF,
+                size: 200,
+                color: 0xFF0000,
                 wireframe: true,
                 aniRotX: 0.01,
                 aniRotY: 0,
-                aniRotZ: 0
+                aniRotZ: 0,
+                rotDelay: true
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
+                size: 200,
+                color: 0xFF0000,
                 wireframe: true,
                 aniRotX: 0,
                 aniRotY: 0.01,
-                aniRotZ: 0
+                aniRotZ: 0,
+                rotDelay: true
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
+                size: 200,
+                color: 0x00FF00,
                 wireframe: true,
                 aniRotX: 0,
                 aniRotY: 0,
-                aniRotZ: 0.01
+                aniRotZ: 0.01,
+                rotDelay: true
             },
-
             {
-                size: 100,
-                color: 0xFFFFFF,
+                size: 200,
+                color: 0x00FF00,
                 wireframe: true,
                 aniRotX: -0.01,
                 aniRotY: 0,
-                aniRotZ: 0
+                aniRotZ: 0,
+                rotDelay: true
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
+                size: 200,
+                color: 0x0000FF,
                 wireframe: true,
                 aniRotX: 0,
                 aniRotY: -0.01,
-                aniRotZ: 0
+                aniRotZ: 0,
+                rotDelay: true
             },
             {
-                size: 100,
-                color: 0xFFFFFF,
+                size: 200,
+                color: 0x0000FF,
                 wireframe: true,
                 aniRotX: 0,
                 aniRotY: 0,
-                aniRotZ: -0.01
+                aniRotZ: -0.01,
+                rotDelay: true
             }
         ];
 
-        clockWiseCubes = [
-            {
-                aniRotX: 0.01,
-                aniRotY: 0,
-                aniRotZ: 0.0,
-                posX: 62,
-                posY: 62
-            },
-            {
-                aniRotX: 0,
-                aniRotY: -0.01,
-                aniRotZ: -0.0,
-                posX: 62,
-                posY: -62
-            },
-            {
-                aniRotX: -0.01,
-                aniRotY: 0,
-                aniRotZ: -0.0,
-                posX: -62,
-                posY: -62
-            },
-            {
-                aniRotX: 0,
-                aniRotY: 0.01,
-                aniRotZ: 0.0,
-                posX: -62,
-                posY: 62
-            }
-        ]
+        // clockWiseCubes = [
+        //     {
+        //         aniRotX: 0.01,
+        //         aniRotY: 0,
+        //         aniRotZ: 0.0,
+        //         posX: 62,
+        //         posY: 62
+        //     },
+        //     {
+        //         aniRotX: 0,
+        //         aniRotY: -0.01,
+        //         aniRotZ: -0.0,
+        //         posX: 62,
+        //         posY: -62
+        //     },
+        //     {
+        //         aniRotX: -0.01,
+        //         aniRotY: 0,
+        //         aniRotZ: -0.0,
+        //         posX: -62,
+        //         posY: -62
+        //     },
+        //     {
+        //         aniRotX: 0,
+        //         aniRotY: 0.01,
+        //         aniRotZ: 0.0,
+        //         posX: -62,
+        //         posY: 62
+        //     }
+        // ]
 
         clockWise2Axes = [
             {
                 aniRotX: 0.01,
-                aniRotY: 0.02,
-                aniRotZ: 0.01,
+                aniRotY: 0,
+                aniRotZ: 0,
                 posX: 62,
                 posY: 62
             },
@@ -139,7 +154,7 @@
 
         xyzRotateExamples = [
             {
-                aniRotX: 0.01,
+                aniRotX: 0.001,
                 aniRotY: 0,
                 aniRotZ: 0,
                 posX: -200,
@@ -148,7 +163,7 @@
             },
             {
                 aniRotX: 0,
-                aniRotY: 0.01,
+                aniRotY: 0.001,
                 aniRotZ: 0.0,
                 posX: 0,
                 posY: 0
@@ -156,7 +171,7 @@
             {
                 aniRotX: 0.0,
                 aniRotY: 0,
-                aniRotZ: 0.01,
+                aniRotZ: 0.001,
                 posX: 200,
                 posY: 0,
                 posZ: 0
@@ -178,39 +193,29 @@
         // });
 
         setsOfForms = [
-            axialCubes,
-            clockWiseCubes,
             clockWise2Axes,
+            axialCubes,
+            // clockWiseCubes,
             xyzRotateExamples
         ]
 
         // add forms to mesh
-        console.log('window.innerHeight', window.innerHeight);
         setsOfForms.forEach((formSet, index) => 
         {
             var yInterval = window.innerHeight / (setsOfForms.length);
-            // console.log("yInterval", yInterval);
-            // console.log((yInterval * index) - window.innerHeight / 2);
             var formSetYPos = (yInterval * (index)) - (window.innerHeight / 2) + yInterval/2;
-            console.log(formSetYPos);
             formSet.forEach(function (form, index) {
                 addFormToMesh(form, index, formSetYPos); 
             });
-
-            //. meshes pos also zero here.
-            console.log('meshes after adding a form set to mesh', meshes[0].position.y);
         });
 
         // meshes pos = 0   why?
-        console.log('meshes at end of adding forms to mesh', meshes[0].position.y);
 
         // add meshes to scene
         // addMeshesToScene(meshes);
-        console.log('meshes', meshes);
 
         meshes.forEach(function (mesh, index)
         {
-            console.log("mesh.position.y", mesh.position.y);
             scene.add(mesh);
             // var matchedCube = set[index];
             // mesh.position.set(
@@ -225,6 +230,9 @@
             var size = options.size || 100;
             var color = options.color || 0xFFFFFF;
             var wireframe = options.wireframe || true;
+            var formPosX = options.posX || 0;
+            var formPosY = options.posY || 0;
+            var formPosZ = options.posZ || 0;
 
             geometry = new THREE.CubeGeometry(size, size, size);
             material = new THREE.MeshBasicMaterial({
@@ -233,12 +241,14 @@
                 wireframeLinewidth: 1
             });
             var formMesh = new THREE.Mesh(geometry, material);
-            // console.log('formMesh.position.y || 0 + formSetYPos', formMesh.position.y + formSetYPos);
-            formMesh.position.x = (formMesh.position.x || 0);
-            formMesh.position.y = (formMesh.position.y || 0) + (formSetYPos || 0);
-            formMesh.position.z = (formMesh.position.z || 0);
-            console.log('aftte from added to mesh formMesh.position.y', formMesh.position.y);
-            // console.log("what is y pos?:", formMesh)
+
+            formMesh.position.x += (formPosX || 0);
+            formMesh.position.y += (formSetYPos || 0) + formPosY;
+            formMesh.position.z = (formMesh.position.z || 0) + formPosZ;
+            formMesh.aniRotX = options.aniRotX;
+            formMesh.aniRotY = options.aniRotY;
+            formMesh.aniRotZ = options.aniRotZ;
+            formMesh.rotDelay = options.rotDelay
             meshes.push(formMesh);
         }
 
@@ -246,7 +256,6 @@
         {
             meshes.forEach(function (mesh, index)
             {
-                console.log("mesh.position.y", mesh.position.y);
                 scene.add(mesh);
                 var matchedCube = set[index];
                 // mesh.position.set(
@@ -269,25 +278,47 @@
     function animate()
     {
         requestAnimationFrame(animate);
+        var globalRotationInc = 0.005;
+        var timeBasedRotation = Date.now() * 0.001;
+        var inLastHalfOfSec = timeBasedRotation - Math.floor(timeBasedRotation) - 0.5 > 0;
+        var rotationIsTimeBased = true;
 
-        // setsOfForms.forEach(set => rotateSet(set));
-        // rotateSet(xyzRotateExamples);
-
+        setsOfForms.forEach(set => rotateSet(set));
+        rotateSet(xyzRotateExamples);
 
         function rotateSet(set)
         {
-            console.log('rotateSet: ', set);
             meshes.forEach(function (mesh, index)
             {
-                var cube = set[index];
-                mesh.rotation.x += cube.aniRotX || 0;
-                mesh.rotation.y += cube.aniRotY || 0;
-                mesh.rotation.z += cube.aniRotZ || 0;
+                if (!rotationIsTimeBased) {
+                    if (mesh.aniRotX > 0) mesh.rotation.x += globalRotationInc;
+                    if (mesh.aniRotX < 0) mesh.rotation.x -= globalRotationInc;
+                    if (mesh.aniRotY > 0) mesh.rotation.y += globalRotationInc;
+                    if (mesh.aniRotY < 0) mesh.rotation.y -= globalRotationInc;
+                    if (mesh.aniRotZ > 0) mesh.rotation.z += globalRotationInc;
+                    if (mesh.aniRotZ < 0) mesh.rotation.z -= globalRotationInc;
+                }
+                else 
+                {
+                    if (mesh.rotDelay) {
+                        if (mesh.aniRotX > 0) mesh.rotation.x = inLastHalfOfSec ? timeBasedRotation : mesh.rotation.x;
+                        if (mesh.aniRotX < 0) mesh.rotation.x = inLastHalfOfSec ? -timeBasedRotation : mesh.rotation.x;
+                        if (mesh.aniRotY > 0) mesh.rotation.y = inLastHalfOfSec ? timeBasedRotation : mesh.rotation.y;
+                        if (mesh.aniRotY < 0) mesh.rotation.y = inLastHalfOfSec ? -timeBasedRotation : mesh.rotation.y;
+                        if (mesh.aniRotZ > 0) mesh.rotation.z = inLastHalfOfSec ? timeBasedRotation : mesh.rotation.z;
+                        if (mesh.aniRotZ < 0) mesh.rotation.z = inLastHalfOfSec ? -timeBasedRotation : mesh.rotation.z;
+                    } else {
+                        if (mesh.aniRotX > 0) mesh.rotation.x = timeBasedRotation;
+                        if (mesh.aniRotX < 0) mesh.rotation.x = -timeBasedRotation;
+                        if (mesh.aniRotY > 0) mesh.rotation.y = timeBasedRotation;
+                        if (mesh.aniRotY < 0) mesh.rotation.y = -timeBasedRotation;
+                        if (mesh.aniRotZ > 0) mesh.rotation.z = timeBasedRotation;
+                        if (mesh.aniRotZ < 0) mesh.rotation.z = -timeBasedRotation;
+                    }
+                    
+                }
             });
         }
-
-        // mesh.rotation.x = Date.now() * 0.0001;
-        // mesh.rotation.y = Date.now() * 0.001;
 
         renderer.render(scene, camera);
     }
